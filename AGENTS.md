@@ -37,7 +37,7 @@ and add a row to the index; that is the whole ritual.
 | `singing-practice-tools` | Solfege exercise transcription and a voice-analysis practice site. | `VocalCoach/backend/web_app.py` |
 | `model-compare` | Cost-vs-performance comparison of the Copilot and Devin model pickers; `generate_report.py` emits a static interactive chart + report. | `python generate_report.py`, open `index.html` |
 | `project-hub` | Index page + launcher for the local services: live status, start/stop/restart, links. | `python hub.py` or `start-hub.bat`, then `http://127.0.0.1:8760` |
-| `sysmon` | Live temperature readout for the Legion; nvidia-smi only trustworthy sensor. | `python temps.py` |
+| `thermalwatch` | Live temperature readout for the Legion plus a web dashboard; nvidia-smi only trustworthy sensor. (Renamed from `sysmon` 2026-09-28.) | `python app.py` (dashboard), `python temps.py` (terminal) |
 
 Two of these hold data that must not leave the machine: `wifi-network-monitor`
 (device inventory, MACs, router responses) and `chrome-bookmarks` (the bookmark
@@ -108,6 +108,7 @@ Local servers, so a new one does not collide:
 | 8765 | `wifi-network-monitor` dashboard |
 | 8770 | `disk-cleanup` viewer |
 | 8780 | `model-compare` static preview (optional; file also opens directly) |
+| 8785 | `thermalwatch` dashboard |
 
 Pick the next free port in the 87xx range for anything new and add it here.
 
