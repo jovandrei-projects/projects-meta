@@ -61,6 +61,12 @@ Sessions end without warning. Work accordingly:
 - **If about to run low, stop and write rather than start something new.**
   Half-finished unverified code is worse than a documented gap.
 
+## First run on a new machine
+
+<What a fresh clone needs beyond git: installs, plus the command that rebuilds
+each gitignored path. If a path cannot be rebuilt - user-made source material
+- say where the original lives instead.>
+
 ## Verifying a change
 
 <The commands that prove a change is sound - syntax check, then the cheapest

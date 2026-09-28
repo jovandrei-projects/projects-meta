@@ -128,6 +128,13 @@ in every project in this folder.
   Never push without being asked.
 - **Do not dump generated files into a project root.** Use `data/` or a
   subfolder.
+- **Whatever is gitignored must be reproducible.** `data/` and friends never
+  travel with the repo, so each project's `AGENTS.md` carries a "First run
+  on a new machine" section with the commands that rebuild them - and for
+  anything that cannot be rebuilt (user-made source material, like
+  singing-practice-tools' scans and vocal takes), it says where the original
+  lives instead. `singing-practice-tools` is the reference: it tracks the
+  irreplaceable inputs deliberately and regenerates everything else.
 - **Assume the session could end at any moment.** Write findings down as you
   get them; a number that only exists in the chat transcript is lost. The
   task workspace below is the mechanism that makes this survivable.
