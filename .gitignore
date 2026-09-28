@@ -1,0 +1,10 @@
+# Each project is its own repository - never track them here.
+# New top-level folders show as untracked, which is the reminder to
+# index them in AGENTS.md and add them here.
+/chrome-bookmarks/
+/disk-cleanup/
+/model-compare/
+/nirvana-concert-images/
+/project-hub/
+/singing-practice-tools/
+/wifi-network-monitor/
