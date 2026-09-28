@@ -37,6 +37,7 @@ and add a row to the index; that is the whole ritual.
 | `singing-practice-tools` | Solfege exercise transcription and a voice-analysis practice site. | `VocalCoach/backend/web_app.py` |
 | `model-compare` | Cost-vs-performance comparison of the Copilot and Devin model pickers; `generate_report.py` emits a static interactive chart + report. | `python generate_report.py`, open `index.html` |
 | `project-hub` | Index page + launcher for the local services: live status, start/stop/restart, links. | `python hub.py` or `start-hub.bat`, then `http://127.0.0.1:8760` |
+| `sysmon` | Live temperature readout for the Legion; nvidia-smi only trustworthy sensor. | `python temps.py` |
 
 Two of these hold data that must not leave the machine: `wifi-network-monitor`
 (device inventory, MACs, router responses) and `chrome-bookmarks` (the bookmark
