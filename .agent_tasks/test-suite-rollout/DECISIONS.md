@@ -113,9 +113,10 @@ is recorded here instead of blocking.
 
 ## Context a new agent might miss
 
-- **Branch names differ across repos.** `main` for most, but `money-plan`
-  and `video-tools` are on `master`. Check `git branch --show-current`
-  before scripting pushes.
+- **Every repo is on `main`** (normalized 2026-10-20: the six `master`
+  repos - chrome-bookmarks, model-compare, money-plan, project-hub,
+  senior-safety-mx, video-tools - were renamed, pushed, made the GitHub
+  default, and remote `master` deleted).
 - **The las_mananitas `.mxl` source is not in the repo.** The manifest's
   `body_sha256` is a provenance record; the import cannot be replayed
   locally to regenerate it. If the `|`/`||` drift should be fixed at the
@@ -204,9 +205,13 @@ is the record the next agent works from. Roughly ordered by importance.
       Options: (a) accept canonicalization, (b) re-import from the mxl,
       (c) rehash the manifest to the current txt.
       Answer:
-- [ ] **Standardize branch names?** `money-plan` and `video-tools` are on
+- [x] **Standardize branch names?** `money-plan` and `video-tools` are on
       `master`; everything else is on `main`. Cosmetic - rename only if it
       bothers you.
-      Answer:
+      Answer: **Done - `main` everywhere.** All six `master` repos renamed
+      (local `branch -m`, `push -u origin main`, GitHub default switched via
+      `gh api`, remote `master` deleted). Same session added
+      `.gitattributes` (`* text=auto`, `*.bat`/`*.cmd eol=crlf`) to all
+      repos - zero renormalize churn, everything was already LF in history.
 - [ ] **Delete `%LOCALAPPDATA%\Temp\lm.json`.** Scratch file from lyric
       inspection in this session; nothing depends on it.
