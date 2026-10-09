@@ -11,7 +11,13 @@ python run_all_tests.py            # every project, summary table at the end
 python run_all_tests.py --quick    # skip tests marked @slow / network
 cd <project> && python run_tests.py        # one project
 cd <project> && python -m unittest discover -s tests -v   # raw unittest
+cd <project> && python -m pytest tests/ -x -q             # optional richer runner
 ```
+
+pytest 9 is installed machine-wide and collects every `unittest.TestCase`
+unchanged - use it for assertion diffs, `-k` filtering and `--lf`
+(re-run failures). Suites stay unittest-style on purpose: the
+zero-dependency `run_tests.py` path keeps working on a fresh machine.
 
 Run before commits/pushes and after any major change. A red suite means the
 change or the environment broke something - read the log, do not assume the
@@ -43,8 +49,15 @@ check the stimulus first, then the code).
    list when adding views.
 5. **Perf** - wall-clock budgets inside smoke tests (generous, e.g. an
    endpoint must answer < 2 s). They catch order-of-magnitude regressions.
-6. **Browser (optional, uninstalled)** - real Selenium needs a pip dep and a
-   driver; deliberately not installed. See DECISIONS.md.
+6. **Browser** - real headless Chromium via Playwright (installed
+   machine-wide, browsers included). Each serving project has
+   `tests/test_browser.py`: spawn the app on an alternate port, load the
+   page for real, exercise one read-only control, and fail on any uncaught
+   JS error (`pageerror`/`console.error`, network noise filtered). Skips
+   cleanly when playwright or its binaries are absent
+   (`python -m playwright install chromium`) and under `--quick`.
+   money-plan runs its handler in-process over a fixture store - real
+   private data is never loaded in a test browser.
 
 Tests that need hardware, credentials, network or missing deps must
 `unittest.skipUnless`/`skipTest` rather than fail.

@@ -134,18 +134,34 @@ is recorded here instead of blocking.
   directly - a `skipped` line is not a failure.
 - **`C:\Users\andry\AppData\Local\Temp\lm.json`** is a leftover scratch
   file from lyric-list inspection; safe to delete, nothing depends on it.
+- **`money-plan-ui/` appeared 2026-10-09 ~10:20** - a fork of money-plan
+  that another agent created mid-session (has its own .agent_tasks, .git
+  pointer file, same module files incl. the pre-fix stdout idiom). It is
+  IN FLIGHT: do not edit it, do not index it yet, and do not assume its
+  test suite exists. When its work settles it needs the same treatment:
+  `tests/` + `run_tests.py`, the `reconfigure` stdout fix, and a row in
+  the root AGENTS.md index + root .gitignore + port registry (it will want
+  a port other than 8800 if both apps can run at once).
 
 ## Open decisions and tasks for the user
 
 Tick `[x]` and note the outcome on the item when decided/done - the note
 is the record the next agent works from. Roughly ordered by importance.
 
-- [ ] **Browser automation layer?** Current coverage is HTTP smoke tests
+- [x] **Browser automation layer?** Current coverage is HTTP smoke tests
       plus disk-cleanup's Node-DOM pattern; real clicking needs selenium +
       a driver (new pip deps, and the machine default is stdlib-only).
       Options: (a) stay with smoke + Node-DOM, (b) install selenium and
       name which projects get it.
-      Answer:
+      Answer: (2026-10-09) User approved installing a browser layer;
+      **Playwright** was chosen over Selenium because it was already fully
+      installed on the machine (pip package + Chromium binaries in
+      %LOCALAPPDATA%\ms-playwright) - zero new browser deps. All 9 serving
+      projects got `tests/test_browser.py` (unittest-style, `--quick`-gated,
+      skips without the package/binaries). Each spawns the app on an
+      alternate port (or in-process for money-plan's fixture store),
+      asserts the page boots, exercises one read-only control, and fails on
+      uncaught JS errors. model-compare loads via file:// (real usage).
 - [ ] **Keep `money-plan` on GitHub?** The repo was created `--private`
       and nothing under `data/` was pushed. If it should not be on GitHub
       at all, delete the remote repo.
@@ -159,10 +175,18 @@ is the record the next agent works from. Roughly ordered by importance.
       app, ~60 MB worst case across everything), surfaced in project-hub's
       Storage panel. Edit `TESTING.md` if you want different limits.
       Answer:
-- [ ] **unittest vs pytest?** Suites are stdlib `unittest` per the
+- [x] **unittest vs pytest?** Suites are stdlib `unittest` per the
       stdlib-only rule. If pytest is ever wanted, that is a dependency
       decision for you; the `tests/` layout ports over unchanged.
-      Answer:
+      Answer: (2026-10-09) pytest 9.1.1 installed as an OPTIONAL runner -
+      it collects all 265 unittest tests unchanged; suites stay
+      unittest-style so `run_tests.py` keeps working with zero deps.
+      Installing it caught a real latent bug: money-plan's
+      `analyze.py`/`store.py`/`fetch.py` replaced `sys.stdout` with a new
+      `TextIOWrapper` around `sys.stdout.buffer`, which closes pytest's
+      capture stream on GC (and would crash under `pythonw`, where stdout
+      is None). Switched to guarded `sys.stdout.reconfigure()` - same
+      idiom run_tests.py already used.
 - [ ] **Confirm the 4 `chapter_pdmx_*` deletions in 57ad809.** They were
       already-staged deletions from the other agent's work that my commit
       swept in (see Incidents). If they were not intended, restore from

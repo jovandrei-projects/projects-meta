@@ -113,7 +113,23 @@ committed and pushed; suites re-run green.
 ## Where it stopped
 
 All phases complete; every suite green. No pending work except the open
-human decisions in DECISIONS.md (Selenium, log caps, hooks).
+human decisions in DECISIONS.md (log caps, hooks, money-plan remote).
+
+Follow-up 2026-10-09 (later session, user present): two DECISIONS items
+answered and implemented - pytest 9.1.1 installed as an optional runner
+(suites stay unittest-style; `python -m pytest tests/` collects all 265),
+and the browser layer landed as `tests/test_browser.py` in all 9 serving
+projects using **Playwright** (already installed incl. Chromium binaries;
+chosen over the approved Selenium for zero new deps). Each test spawns the
+app on an alternate port, asserts the page boots, drives one read-only
+control, and fails on uncaught JS errors. Two latent bugs fixed on the
+way: money-plan's stdout re-wrap closed pytest's capture stream
+(`reconfigure()` now, in analyze.py/store.py/fetch.py). Full
+run_all_tests.py green incl. every browser test; money-plan standalone
+green. `.pytest_cache/` added to all gitignores. NOT pushed - local
+commits only, awaiting the user. CAUTION: `money-plan-ui/` appeared
+mid-session (other agent's live fork) - left untouched, noted in
+DECISIONS.md context.
 
 CAUTION (note for next agent): the singing-practice-tools commit 57ad809
 accidentally included 4 already-staged chapter_pdmx_* file deletions - `git
