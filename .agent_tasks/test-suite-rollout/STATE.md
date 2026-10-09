@@ -126,10 +126,18 @@ control, and fails on uncaught JS errors. Two latent bugs fixed on the
 way: money-plan's stdout re-wrap closed pytest's capture stream
 (`reconfigure()` now, in analyze.py/store.py/fetch.py). Full
 run_all_tests.py green incl. every browser test; money-plan standalone
-green. `.pytest_cache/` added to all gitignores. NOT pushed - local
-commits only, awaiting the user. CAUTION: `money-plan-ui/` appeared
-mid-session (other agent's live fork) - left untouched, noted in
-DECISIONS.md context.
+green. `.pytest_cache/` added to all gitignores.
+
+Same session, later: `ui-batch4` (the money-plan-ui worktree's branch)
+merged into money-plan master after user visual check - zero file
+overlap, clean merge. Suite re-verified 30/30 + `analyze.py --check`.
+:8800 was serving pre-merge code from a 02:30 process; restarted via the
+hub (`/api/services/money-plan/restart`), verified byte-identical to the
+branch's own output. :8801 stopped; worktree removed (its `data/` was a
+subset copy - all 8 files identical in canonical; nothing lost), branch
+deleted, port-8801 registry row removed. money-plan pushed
+(86cd1ad..f62a8a4). Other repos stay 1 commit ahead - unpushed pending
+user.
 
 CAUTION (note for next agent): the singing-practice-tools commit 57ad809
 accidentally included 4 already-staged chapter_pdmx_* file deletions - `git
