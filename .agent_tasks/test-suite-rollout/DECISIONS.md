@@ -178,10 +178,10 @@ is the record the next agent works from. Roughly ordered by importance.
       hook is a documented no-op. Verified live - every push on 2026-10-20
       ran its suite first. New clones need `git config core.hooksPath
       hooks` once (noted in TESTING.md).
-- [ ] **Log cap OK?** Policy is RotatingFileHandler 1 MB x 5 (~6 MB per
+- [x] **Log cap OK?** Policy is RotatingFileHandler 1 MB x 5 (~6 MB per
       app, ~60 MB worst case across everything), surfaced in project-hub's
       Storage panel. Edit `TESTING.md` if you want different limits.
-      Answer:
+      Answer: **Accepted** (user, 2026-10-20).
 - [x] **unittest vs pytest?** Suites are stdlib `unittest` per the
       stdlib-only rule. If pytest is ever wanted, that is a dependency
       decision for you; the `tests/` layout ports over unchanged.
