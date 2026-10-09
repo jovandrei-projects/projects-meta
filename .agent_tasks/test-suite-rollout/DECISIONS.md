@@ -91,15 +91,31 @@ is recorded here instead of blocking.
   already) and the files are recoverable from git history if unwanted.
   Lesson for future runs here: check for staged changes too, not just ` M`.
 
+## Follow-up fixes (2026-10-09, after the suites were exercised)
+
+- **money-plan CSRF on `/api/catmap` (fixed, commit 86cd1ad).** `do_POST`
+  accepted mutating requests with no custom header, so a cross-origin page
+  could write category mappings. Server now requires `X-Money-Plan-Request`
+  on POSTs and `apiFetch` sends it - the same guard project-hub and
+  video-tools already had. Regression test asserts 4xx rejection without it.
+- **thermalwatch web-sibling path escape (fixed, commit b164ced).**
+  `send_file` used a `startswith(WEB)` prefix check, which accepts paths in
+  a sibling like `web-sibling/`. Replaced with resolved-path containment;
+  test covers real-file accept, sibling reject, traversal reject.
+- **singing-practice-tools las_mananitas test (updated, commit 3228f93).**
+  Not a bug: the other agent's rewrite settled on 7 harmonica/guitar
+  exercises ("Las Mañanitas — Harmonica/guitar"). Test updated to the new
+  contract. The manifest `body_sha256` drift was purely `|` -> `||`
+  barlines (byte-identical otherwise, verified by canonicalizing), so the
+  test canonicalizes barline runs before hashing - real note/lyric drift
+  still fails. tempo-beat-unit's STATE.md had already documented this
+  drift as a known pre-existing failure at HEAD.
+
 ## Open questions left for the user
 
 - Real Selenium/browser-driver testing wanted? (needs pip install)
 - money-plan GitHub repo: created `--private`. If it should not be on
   GitHub at all, delete the remote repo; nothing under `data/` was pushed.
-- singing-practice-tools has one known-red test
-  (`test_las_mananitas_chapter_preserves_both_arrangements`) pinned to the
-  in-flight manifest rewrite - confirm with the other agent's task whether
-  "Two Arrangements" vs "Harmonica/guitar" is the intended final name.
 - Should `run_all_tests.py` also be wired as a git pre-push hook in each
   repo? Left undone - hooks are per-clone and a failing push-hook on a
   machine with optional deps (video-tools venv) could block legitimate

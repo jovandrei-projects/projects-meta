@@ -1,6 +1,6 @@
 # Task: test-suite-rollout
 
-Status: in progress
+Status: done (open questions for the user live in DECISIONS.md)
 Started: 2026-10-09 (overnight run, user asleep - no blocking questions; see
 DECISIONS.md for calls that were made and calls left open)
 
@@ -91,26 +91,29 @@ Phase 3 - wrap-up
 | model-compare | tests/ (3 files) + run_tests.py | 35/35 | 503b0cd |
 | nirvana-concert-images | tests/test_scrape.py | 24/24 | df52323 |
 | senior-safety-mx | tests/ (2 files) | 21/21; suite caught empty price row on apple-watch, fixed | fe2dc1d (new private repo) |
-| thermalwatch | tests/ (2 files) + run_tests.py | 25/25 | f73b190 |
+| thermalwatch | tests/ (2 files) + run_tests.py | 26/26; follow-up hardened web/ path confinement (startswith prefix bug) | b164ced |
 | disk-cleanup | tests/ (4 files incl. JS DOM) | 43/43 | a095909 |
 | wifi-network-monitor | tests/test_monitor.py + run_tests.py | 11/11 | 3f62ed1 |
 | video-tools | tests/test_app.py + run_tests.py | 15/15 | (new private repo, master) |
 | project-hub | tests/test_hub.py + run_tests.py; /api/storage + Storage UI table | 13/13 | ce1ae21 |
-| singing-practice-tools | run_tests.py wraps existing gate | 70 checks, 1 red | 57ad809 |
-| money-plan | tests/ (3 files) + run_tests.py | 28/28 | pushed to new private repo |
+| singing-practice-tools | run_tests.py wraps existing gate | 70/70 checks | 3228f93 |
+| money-plan | tests/ (3 files) + run_tests.py | 29/29; follow-up added CSRF guard on mutating POSTs | 86cd1ad |
 
-Final orchestrator run: 10/11 green at 2026-10-09 03:28 (`--include-money-plan`).
+Final orchestrator run: all green at 2026-10-09 03:44 (money-plan skipped by
+its own 60-min quiet guard; standalone run 29/29 OK at 03:44).
+
+Follow-up pass (user asked to fix test-uncovered issues): the las_mananitas
+test failure was stale expectations vs the settled 7-exercise
+harmonica/guitar rewrite - updated to the new contract (title, counts,
+tempos, lyrics) and barline-canonicalized the body_sha256 check ('||' vs '|'
+is parser-identical per BARLINE_RE). Two real defects found and fixed:
+money-plan CSRF on /api/catmap, thermalwatch web-sibling path escape. Both
+committed and pushed; suites re-run green.
 
 ## Where it stopped
 
-All Phase 1 projects done. NEXT: build C:\Projects\run_all_tests.py, then
-money-plan (re-check `find money-plan -type f -mmin -60` - quiet since the
-02:30 commit as of ~03:20), then Phase 3.
-
-KNOWN-RED (not ours): singing-practice-tools suite_test_musicxml_import ->
-test_las_mananitas_chapter_preserves_both_arrangements expects chapter name
-'Two Arrangements'; chapter_las_mananitas/import_manifest.json is mid-rewrite
-by the in-flight control-layout/pitch-view tasks. Re-verify after they land.
+All phases complete; every suite green. No pending work except the open
+human decisions in DECISIONS.md (Selenium, log caps, hooks).
 
 CAUTION (note for next agent): the singing-practice-tools commit 57ad809
 accidentally included 4 already-staged chapter_pdmx_* file deletions - `git
