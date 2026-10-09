@@ -111,6 +111,30 @@ is recorded here instead of blocking.
   still fails. tempo-beat-unit's STATE.md had already documented this
   drift as a known pre-existing failure at HEAD.
 
+## Context a new agent might miss
+
+- **Branch names differ across repos.** `main` for most, but `money-plan`
+  and `video-tools` are on `master`. Check `git branch --show-current`
+  before scripting pushes.
+- **The las_mananitas `.mxl` source is not in the repo.** The manifest's
+  `body_sha256` is a provenance record; the import cannot be replayed
+  locally to regenerate it. If the `|`/`||` drift should be fixed at the
+  source rather than canonicalized in the test, the original
+  `las-mananitas-do-para-armonica-y-acompanada-de-guitarra.mxl` lives
+  wherever the user keeps user-supplied scores.
+- **singing-practice-tools still carries ~27 modified/untracked paths**
+  from the other agent's in-flight tasks (control-layout, pitch-view,
+  tempo-beat-unit). Leave them uncommitted; stage only your own files and
+  check `git diff --cached` before committing - the index has surprised
+  once already (see Incidents).
+- **The money-plan quiet-guard in `run_all_tests.py` is now vestigial.**
+  The other agent's work finished 2026-10-09 ~02:30; the guard just means
+  money-plan reports `skipped` in the summary whenever its files are
+  <60 min old. Use `--include-money-plan` or run `run_tests.py` there
+  directly - a `skipped` line is not a failure.
+- **`C:\Users\andry\AppData\Local\Temp\lm.json`** is a leftover scratch
+  file from lyric-list inspection; safe to delete, nothing depends on it.
+
 ## Open questions left for the user
 
 - Real Selenium/browser-driver testing wanted? (needs pip install)
