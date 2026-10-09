@@ -4,8 +4,17 @@
 /chrome-bookmarks/
 /disk-cleanup/
 /model-compare/
+/money-plan/
 /nirvana-concert-images/
 /project-hub/
+/senior-safety-mx/
 /singing-practice-tools/
 /thermalwatch/
+/video-tools/
 /wifi-network-monitor/
+
+# Orchestrator output and stray shell artifacts
+/logs/
+/nul
+.agent_tasks/*/scratch/
+__pycache__/

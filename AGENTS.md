@@ -40,10 +40,13 @@ and add a row to the index; that is the whole ritual.
 | `thermalwatch` | Live temperature readout for the Legion plus a web dashboard; nvidia-smi only trustworthy sensor. (Renamed from `sysmon` 2026-09-28.) | `python app.py` (dashboard), `python temps.py` (terminal) |
 | `video-tools` | Sorts recordings in `C:\Users\andry\Videos\history` into `_has_content`/`_blank_candidates` and generates whisper `.srt` sidecars. Media stays in `Videos`. | `analyze-blank-videos.bat` (copy also in `Videos`) |
 | `senior-safety-mx` | Evidence-backed catalog of emergency/fall-detection devices & services that work in Mexico (for an elder alone overnight). `devices.json` -> `index.html`. | `python generate_report.py`, `python app.py` |
+| `money-plan` | Rebuilds the user's 2024 conscious-spending-plan Excel from Monarch CSV exports; debt-paydown + budget targets. **Fully private financial data** - `data/` never leaves the machine, no serving. | `python analyze.py` (`--check` for sanity) |
 
-Two of these hold data that must not leave the machine: `wifi-network-monitor`
-(device inventory, MACs, router responses) and `chrome-bookmarks` (the bookmark
-set is a personal browsing record, and `data/` contains verbatim copies of it).
+Three of these hold data that must not leave the machine: `wifi-network-monitor`
+(device inventory, MACs, router responses), `chrome-bookmarks` (the bookmark
+set is a personal browsing record, and `data/` contains verbatim copies of it),
+and `money-plan` (paystubs, transaction exports, account numbers - the
+strictest privacy bar in this folder).
 Treat `data/` as private and gitignored in every project unless its own
 `AGENTS.md` says otherwise.
 
@@ -113,6 +116,7 @@ Local servers, so a new one does not collide:
 | 8785 | `thermalwatch` dashboard |
 | 8790 | `video-tools` dashboard |
 | 8795 | `senior-safety-mx` device catalog |
+| 8800 | `money-plan` CSP dashboard |
 
 Pick the next free port in the 87xx range for anything new and add it here.
 
@@ -144,6 +148,13 @@ in every project in this folder.
 - **Assume the session could end at any moment.** Write findings down as you
   get them; a number that only exists in the chat transcript is lost. The
   task workspace below is the mechanism that makes this survivable.
+- **Every served page gets a unique favicon** so its browser tab is
+  identifiable at a glance among the local apps. The convention is an inline
+  `data:image/svg+xml` `<link rel="icon">` in the `<head>` - a dark rounded
+  badge with a distinct colored glyph. No icon file or route is needed and it
+  works over `file://` too; generated pages get it in their template so it
+  survives regeneration. Existing examples: `project-hub/web/index.html`,
+  `wifi-network-monitor/app/live_monitor.py`.
 
 ## The task workspace - how sessions resume here
 
@@ -187,5 +198,6 @@ while the user evaluates it. Do not open a second task while one is
    up front.
 5. File the first task in `QUEUE.md` - with a `<task>/STATE.md` folder if it
    will outlive one session, under *Not yet filed* if not.
-6. Add a row to the project index above, and a port to the registry if the
-   project serves anything.
+6. Add a row to the project index above, a port to the registry if the
+   project serves anything, and a unique favicon to any page it serves
+   (see *Working habits*).
