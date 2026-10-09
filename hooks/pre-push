@@ -1,0 +1,4 @@
+#!/bin/sh
+# Workspace meta repo - no project suite of its own.
+# Cross-project coverage is a manual step: python run_all_tests.py --quick
+exit 0

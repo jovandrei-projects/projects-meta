@@ -139,6 +139,19 @@ deleted, port-8801 registry row removed. money-plan pushed
 (86cd1ad..f62a8a4). Other repos stay 1 commit ahead - unpushed pending
 user.
 
+Same session, normalization pass: all repos on `main` (6 `master`
+renamed, remotes' default switched, remote `master` deleted), all
+pushed, `.gitattributes` added everywhere (zero renormalize churn),
+tracked `hooks/pre-push` wired via `core.hooksPath` in every repo (runs
+`run_tests.py --quick`; verified live on every push), READMEs written
+for the 9 repos lacking one, shared `requirements-dev.txt` created,
+GitHub descriptions set, money-plan quiet-guard stripped from
+run_all_tests.py, `%LOCALAPPDATA%\Temp\lm.json` deleted. Remaining open
+items in DECISIONS: log-cap confirmation, the 4 swept `chapter_pdmx_*`
+deletions (needs user intent check), las_mananitas `|`/`||` source drift
+(needs the original .mxl). spt still holds the other agent's uncommitted
+WIP - untouched; renormalize deferred there until it lands.
+
 CAUTION (note for next agent): the singing-practice-tools commit 57ad809
 accidentally included 4 already-staged chapter_pdmx_* file deletions - `git
 status` had them as `D ` (staged) before commit ran. They were deleted on

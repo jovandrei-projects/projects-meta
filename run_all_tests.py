@@ -6,14 +6,12 @@
 
 Per-project output lands in logs/test-run-<ts>-<project>.log next to this
 file; the console gets a compact summary. Exit code is nonzero if any suite
-fails. money-plan is skipped while files under it are < 60 min old (another
-agent works there) unless --include-money-plan is passed.
+fails.
 
 A project runs via its own run_tests.py when present, else via
 `python -m unittest discover -s tests` when it has a tests/ dir.
 """
 import datetime
-import os
 import subprocess
 import sys
 import time
@@ -21,8 +19,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 LOG_DIR = ROOT / "logs"
-MONEY_PLAN = ROOT / "money-plan"
-MONEY_QUIET_MINUTES = 60
 PER_PROJECT_TIMEOUT = 1800
 
 try:
@@ -44,24 +40,8 @@ def projects():
     return out
 
 
-def money_plan_quiet():
-    """Newest mtime under money-plan, or None when there are no files."""
-    newest = 0.0
-    for dirpath, dirs, files in os.walk(MONEY_PLAN):
-        dirs[:] = [d for d in dirs if d not in (".git", ".venv",
-                                               "__pycache__", "node_modules")]
-        for fn in files:
-            try:
-                newest = max(newest, os.path.getmtime(
-                    os.path.join(dirpath, fn)))
-            except OSError:
-                pass
-    return newest
-
-
 def main():
     quick = "--quick" in sys.argv
-    include_mp = "--include-money-plan" in sys.argv
     only = None
     for i, a in enumerate(sys.argv):
         if a == "--only" and i + 1 < len(sys.argv):
@@ -73,14 +53,6 @@ def main():
     for name, cmd in projects():
         if only and not any(x in name for x in only):
             continue
-        if name == "money-plan" and not include_mp:
-            newest = money_plan_quiet()
-            idle_min = (time.time() - newest) / 60 if newest else 1e9
-            if idle_min < MONEY_QUIET_MINUTES:
-                print("[skip] %s (last file change %.0f min ago)"
-                      % (name, idle_min))
-                results.append((name, "skipped", 0.0, "recent changes"))
-                continue
         run_cmd = cmd + (["--quick"] if quick and "run_tests.py" in cmd else [])
         log_path = LOG_DIR / ("test-run-%s-%s.log" % (stamp, name))
         t0 = time.time()

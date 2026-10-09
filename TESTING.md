@@ -62,6 +62,24 @@ check the stimulus first, then the code).
 Tests that need hardware, credentials, network or missing deps must
 `unittest.skipUnless`/`skipTest` rather than fail.
 
+## Dev dependencies
+
+Shared test tooling lives in `C:\Projects\requirements-dev.txt`
+(`pytest`, `playwright`) - install it once per environment, then run
+`playwright install chromium` for the browser binaries. Project runtime
+deps stay in the project's own `requirements.txt`
+(`singing-practice-tools` only; everything else is stdlib-only).
+
+## Pre-push hooks
+
+Each repo carries `hooks/pre-push` (tracked) and has
+`core.hooksPath=hooks` set locally. Pushing runs
+`python run_tests.py --quick`; a failing suite aborts the push. Override
+with `git push --no-verify` when you genuinely need to skip. The root
+meta repo's hook is a no-op - cross-project coverage is
+`run_all_tests.py`. New clones need `git config core.hooksPath hooks`
+once.
+
 ## Logging policy
 
 - **Where:** `<project>/logs/` - always gitignored, never in `data/` unless

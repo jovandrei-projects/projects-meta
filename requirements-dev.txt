@@ -1,0 +1,10 @@
+# Dev/test tooling shared by every project in this workspace.
+# Install once per machine/env:  pip install -r requirements-dev.txt
+# then fetch the browser binaries:  playwright install chromium
+#
+# Project runtime deps stay in each project's own requirements.txt
+# (singing-practice-tools is the only project that has any; everything
+# else is stdlib-only by policy).
+
+pytest==9.1.1        # optional nicer runner; suites stay unittest-style
+playwright==1.63.0   # headless-browser test layer (tests/test_browser.py)

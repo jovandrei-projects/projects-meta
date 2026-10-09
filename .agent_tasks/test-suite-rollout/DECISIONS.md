@@ -163,15 +163,21 @@ is the record the next agent works from. Roughly ordered by importance.
       alternate port (or in-process for money-plan's fixture store),
       asserts the page boots, exercises one read-only control, and fails on
       uncaught JS errors. model-compare loads via file:// (real usage).
-- [ ] **Keep `money-plan` on GitHub?** The repo was created `--private`
+- [x] **Keep `money-plan` on GitHub?** The repo was created `--private`
       and nothing under `data/` was pushed. If it should not be on GitHub
       at all, delete the remote repo.
-      Answer:
-- [ ] **Pre-push hooks?** `run_all_tests.py` is not wired into git hooks -
+      Answer: **Kept - private repo, `data/` stays gitignored.** User has
+      pushed it repeatedly; privacy bar holds because `data/` never travels.
+- [x] **Pre-push hooks?** `run_all_tests.py` is not wired into git hooks -
       hooks are per-clone and a missing optional dep (video-tools venv)
       could block legitimate pushes. Options: (a) leave manual, (b) add a
       `pre-push.sample` each repo can opt into, (c) wire real hooks.
-      Answer:
+      Answer: **(c) done.** Each repo tracks `hooks/pre-push` (runs
+      `python run_tests.py --quick`, aborts on failure, overridable with
+      `--no-verify`) and has `core.hooksPath=hooks` set locally; root's
+      hook is a documented no-op. Verified live - every push on 2026-10-20
+      ran its suite first. New clones need `git config core.hooksPath
+      hooks` once (noted in TESTING.md).
 - [ ] **Log cap OK?** Policy is RotatingFileHandler 1 MB x 5 (~6 MB per
       app, ~60 MB worst case across everything), surfaced in project-hub's
       Storage panel. Edit `TESTING.md` if you want different limits.
@@ -193,11 +199,12 @@ is the record the next agent works from. Roughly ordered by importance.
       swept in (see Incidents). If they were not intended, restore from
       `57ad809^`. Verify intent, then tick.
       Answer:
-- [ ] **Remove the money-plan quiet-guard?** `run_all_tests.py` still
+- [x] **Remove the money-plan quiet-guard?** `run_all_tests.py` still
       skips money-plan when files there are <60 min old; the other agent's
       work is finished, so the guard is vestigial. Keep (harmless, skips
       are visible as `skipped` not `ok`) or strip it to always run.
-      Answer:
+      Answer: **Stripped** - the other agent's work merged and pushed;
+      `run_all_tests.py` now runs money-plan unconditionally.
 - [ ] **Fix the las_mananitas `|`/`||` drift at the source?** The test
       canonicalizes barline runs before hashing, so the suite is green and
       real drift still fails. To make the manifest literally match instead,
@@ -213,5 +220,6 @@ is the record the next agent works from. Roughly ordered by importance.
       `gh api`, remote `master` deleted). Same session added
       `.gitattributes` (`* text=auto`, `*.bat`/`*.cmd eol=crlf`) to all
       repos - zero renormalize churn, everything was already LF in history.
-- [ ] **Delete `%LOCALAPPDATA%\Temp\lm.json`.** Scratch file from lyric
+- [x] **Delete `%LOCALAPPDATA%\Temp\lm.json`.** Scratch file from lyric
       inspection in this session; nothing depends on it.
+      Answer: **Deleted** 2026-10-20.
