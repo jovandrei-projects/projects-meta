@@ -135,12 +135,54 @@ is recorded here instead of blocking.
 - **`C:\Users\andry\AppData\Local\Temp\lm.json`** is a leftover scratch
   file from lyric-list inspection; safe to delete, nothing depends on it.
 
-## Open questions left for the user
+## Open decisions and tasks for the user
 
-- Real Selenium/browser-driver testing wanted? (needs pip install)
-- money-plan GitHub repo: created `--private`. If it should not be on
-  GitHub at all, delete the remote repo; nothing under `data/` was pushed.
-- Should `run_all_tests.py` also be wired as a git pre-push hook in each
-  repo? Left undone - hooks are per-clone and a failing push-hook on a
-  machine with optional deps (video-tools venv) could block legitimate
-  pushes. A `pre-push.sample` or a note in TESTING.md may be enough.
+Tick `[x]` and note the outcome on the item when decided/done - the note
+is the record the next agent works from. Roughly ordered by importance.
+
+- [ ] **Browser automation layer?** Current coverage is HTTP smoke tests
+      plus disk-cleanup's Node-DOM pattern; real clicking needs selenium +
+      a driver (new pip deps, and the machine default is stdlib-only).
+      Options: (a) stay with smoke + Node-DOM, (b) install selenium and
+      name which projects get it.
+      Answer:
+- [ ] **Keep `money-plan` on GitHub?** The repo was created `--private`
+      and nothing under `data/` was pushed. If it should not be on GitHub
+      at all, delete the remote repo.
+      Answer:
+- [ ] **Pre-push hooks?** `run_all_tests.py` is not wired into git hooks -
+      hooks are per-clone and a missing optional dep (video-tools venv)
+      could block legitimate pushes. Options: (a) leave manual, (b) add a
+      `pre-push.sample` each repo can opt into, (c) wire real hooks.
+      Answer:
+- [ ] **Log cap OK?** Policy is RotatingFileHandler 1 MB x 5 (~6 MB per
+      app, ~60 MB worst case across everything), surfaced in project-hub's
+      Storage panel. Edit `TESTING.md` if you want different limits.
+      Answer:
+- [ ] **unittest vs pytest?** Suites are stdlib `unittest` per the
+      stdlib-only rule. If pytest is ever wanted, that is a dependency
+      decision for you; the `tests/` layout ports over unchanged.
+      Answer:
+- [ ] **Confirm the 4 `chapter_pdmx_*` deletions in 57ad809.** They were
+      already-staged deletions from the other agent's work that my commit
+      swept in (see Incidents). If they were not intended, restore from
+      `57ad809^`. Verify intent, then tick.
+      Answer:
+- [ ] **Remove the money-plan quiet-guard?** `run_all_tests.py` still
+      skips money-plan when files there are <60 min old; the other agent's
+      work is finished, so the guard is vestigial. Keep (harmless, skips
+      are visible as `skipped` not `ok`) or strip it to always run.
+      Answer:
+- [ ] **Fix the las_mananitas `|`/`||` drift at the source?** The test
+      canonicalizes barline runs before hashing, so the suite is green and
+      real drift still fails. To make the manifest literally match instead,
+      re-import needs the original `.mxl` (not in the repo - see Context).
+      Options: (a) accept canonicalization, (b) re-import from the mxl,
+      (c) rehash the manifest to the current txt.
+      Answer:
+- [ ] **Standardize branch names?** `money-plan` and `video-tools` are on
+      `master`; everything else is on `main`. Cosmetic - rename only if it
+      bothers you.
+      Answer:
+- [ ] **Delete `%LOCALAPPDATA%\Temp\lm.json`.** Scratch file from lyric
+      inspection in this session; nothing depends on it.
