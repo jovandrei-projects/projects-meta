@@ -27,7 +27,7 @@ check the stimulus first, then the code).
 | Test output | `<project>/logs/test-<timestamp>.log` (UTF-8; console is cp1252) |
 | App logs | `<project>/logs/<app>.log` via `RotatingFileHandler` |
 | Orchestrator | `C:\Projects\run_all_tests.py` |
-| Log monitor | `project-hub` Logs & Disk panel (`/api/logs`) |
+| Log monitor | `project-hub` Storage table (`/api/storage`) |
 
 ## Test layers, cheapest first
 

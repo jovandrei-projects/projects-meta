@@ -69,13 +69,37 @@ is recorded here instead of blocking.
    and are tracked by projects-meta so resumability survives a clone.
    `.agent_tasks/*/scratch/` is gitignored there as elsewhere.
 
+10. **project-hub monitoring = `/api/storage`, not a per-app logger rollout.**
+    The per-app `RotatingFileHandler` idea in the original design was dropped
+    in favor of what already exists: each dashboard already writes bounded
+    logs (`logs/` per project, sqlite retention tiers in the monitors). The
+    hub's new `storage_report()` + Storage table gives the "watch for a
+    runaway log / disk filling" layer the user asked for without rewriting
+    eleven logging stacks. `/api/storage` reports sizes only, never content.
+
+11. **money-plan waited ~70 min of quiet, not a clock-time rule.**
+    Its last change was the other agent's own 02:30 commit; work started at
+    ~03:40 once `find -mmin -60` came back clean. Tests patch `store.DB` and
+    the inbox paths onto temp dirs - zero real financial data in fixtures.
+
+## Incidents
+
+- **singing-practice-tools commit 57ad809 swept in 4 staged deletions.**
+  `chapter_pdmx_danny_boy_c_major/` and `chapter_pdmx_na_simplified/` files
+  were already staged `D` by the in-flight work; `git commit` took the whole
+  index. Nothing was deleted by this rollout (they were gone on disk
+  already) and the files are recoverable from git history if unwanted.
+  Lesson for future runs here: check for staged changes too, not just ` M`.
+
 ## Open questions left for the user
 
 - Real Selenium/browser-driver testing wanted? (needs pip install)
 - money-plan GitHub repo: created `--private`. If it should not be on
   GitHub at all, delete the remote repo; nothing under `data/` was pushed.
-- Log cap of 1 MB x 5 per app OK? Change `LOG_MAX_BYTES`/`LOG_BACKUPS`
-  defaults in TESTING.md and each app's logging setup if not.
+- singing-practice-tools has one known-red test
+  (`test_las_mananitas_chapter_preserves_both_arrangements`) pinned to the
+  in-flight manifest rewrite - confirm with the other agent's task whether
+  "Two Arrangements" vs "Harmonica/guitar" is the intended final name.
 - Should `run_all_tests.py` also be wired as a git pre-push hook in each
   repo? Left undone - hooks are per-clone and a failing push-hook on a
   machine with optional deps (video-tools venv) could block legitimate

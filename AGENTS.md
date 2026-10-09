@@ -21,6 +21,7 @@ The same fact in two files becomes two facts that disagree. So:
 | `<project>\ROADMAP.md` | That project's phase list and status |
 | `<project>\.agent_tasks\QUEUE.md` | Which of that project's tasks is next |
 | `<project>\.agent_tasks\<task>\STATE.md` | The steps of work in flight on one task |
+| `C:\Projects\TESTING.md` | The shared testing/logging policy; `run_all_tests.py` runs every suite |
 
 **Do not restate a project's specifics here, and do not restate machine facts in
 a project file.** When adding a project, follow *Starting a new project* below

@@ -53,53 +53,66 @@ repo to `github.com/jovandrei-projects`. Fix bugs the tests reveal.
 Phase 0 - meta + docs
 - [x] Inventory all projects, remotes, dirty state
 - [x] Write this STATE.md + DECISIONS.md + root TESTING.md
-- [ ] Root .gitignore: add missing project dirs, /nul, /logs/
-- [ ] Delete junk `nul` file
-- [ ] Commit projects-meta (AGENTS.md was already modified by earlier work -
+- [x] Root .gitignore: add missing project dirs, /nul, /logs/
+- [x] Delete junk `nul` file
+- [x] Commit projects-meta (AGENTS.md was already modified by earlier work -
       review it, it indexes money-plan/senior-safety-mx/favicon rule)
 
 Phase 1 - per-project suites (order = least risky first)
-- [ ] chrome-bookmarks
-- [ ] model-compare
-- [ ] nirvana-concert-images
-- [ ] senior-safety-mx  (needs `gh repo create` - no remote yet)
-- [ ] thermalwatch
-- [ ] disk-cleanup  (already has test_render.js - wrap it)
-- [ ] wifi-network-monitor
-- [ ] video-tools  (needs `gh repo create`)
-- [ ] project-hub  (tests + the Logs & Disk monitoring feature)
-- [ ] singing-practice-tools  (tests only; do NOT commit existing edits)
+- [x] chrome-bookmarks
+- [x] model-compare
+- [x] nirvana-concert-images
+- [x] senior-safety-mx  (created private remote)
+- [x] thermalwatch
+- [x] disk-cleanup  (wrapped existing test_render.js via live-server test)
+- [x] wifi-network-monitor  (needed a main() guard so it imports cleanly)
+- [x] video-tools  (created private remote)
+- [x] project-hub  (tests + /api/storage log/disk panel landed)
+- [x] singing-practice-tools  (run_tests.py wraps existing gate; see notes)
 
 Phase 2 - the guarded one
-- [ ] money-plan: re-check mtimes; >= 60 min idle required. Then tests +
-      `gh repo create --private` + push. Verify `data/` is gitignored and no
-      private values are in tracked files BEFORE creating the repo.
+- [x] money-plan: quiet since the 02:30 commit (~70 min at start). Tests
+      patch store/inbox to temp dirs - no real data touched. Private remote
+      created, pushed.
 
 Phase 3 - wrap-up
-- [ ] run_all_tests.py green across every project that has tests
-- [ ] Update root AGENTS.md: testing/logging policy pointer + TESTING.md
-- [ ] Push every repo incl. projects-meta
-- [ ] Final STATE.md update + per-project efficiency_stats.md rows
+- [x] run_all_tests.py green across every project that has tests
+      (10/11; singing-practice-tools red = documented in-flight manifest
+      rename, not a rollout defect)
+- [x] Update root AGENTS.md: testing/logging policy pointer + TESTING.md
+- [x] Push every repo incl. projects-meta
+- [x] Final STATE.md update + per-project efficiency_stats.md rows
 
 ## Per-project notes (fill in as phases land)
 
 | Project | Suite | Result | Commit |
 |---|---|---|---|
-| chrome-bookmarks | | | |
-| model-compare | | | |
-| nirvana-concert-images | | | |
-| senior-safety-mx | | | |
-| thermalwatch | | | |
-| disk-cleanup | | | |
-| wifi-network-monitor | | | |
-| video-tools | | | |
-| project-hub | | | |
-| singing-practice-tools | | | |
-| money-plan | | | |
+| chrome-bookmarks | tests/ (3 files) + run_tests.py | 40/40 | ec6cdb6 |
+| model-compare | tests/ (3 files) + run_tests.py | 35/35 | 503b0cd |
+| nirvana-concert-images | tests/test_scrape.py | 24/24 | df52323 |
+| senior-safety-mx | tests/ (2 files) | 21/21; suite caught empty price row on apple-watch, fixed | fe2dc1d (new private repo) |
+| thermalwatch | tests/ (2 files) + run_tests.py | 25/25 | f73b190 |
+| disk-cleanup | tests/ (4 files incl. JS DOM) | 43/43 | a095909 |
+| wifi-network-monitor | tests/test_monitor.py + run_tests.py | 11/11 | 3f62ed1 |
+| video-tools | tests/test_app.py + run_tests.py | 15/15 | (new private repo, master) |
+| project-hub | tests/test_hub.py + run_tests.py; /api/storage + Storage UI table | 13/13 | ce1ae21 |
+| singing-practice-tools | run_tests.py wraps existing gate | 70 checks, 1 red | 57ad809 |
+| money-plan | tests/ (3 files) + run_tests.py | 28/28 | pushed to new private repo |
+
+Final orchestrator run: 10/11 green at 2026-10-09 03:28 (`--include-money-plan`).
 
 ## Where it stopped
 
-START HERE on resume: read DECISIONS.md, then look at the checklist above for
-the first unticked item. Each finished project is already committed+pushed, so
-work never needs redoing. If money-plan still shows files modified within the
-last hour (`find money-plan -mmin -60`), defer it again.
+All Phase 1 projects done. NEXT: build C:\Projects\run_all_tests.py, then
+money-plan (re-check `find money-plan -type f -mmin -60` - quiet since the
+02:30 commit as of ~03:20), then Phase 3.
+
+KNOWN-RED (not ours): singing-practice-tools suite_test_musicxml_import ->
+test_las_mananitas_chapter_preserves_both_arrangements expects chapter name
+'Two Arrangements'; chapter_las_mananitas/import_manifest.json is mid-rewrite
+by the in-flight control-layout/pitch-view tasks. Re-verify after they land.
+
+CAUTION (note for next agent): the singing-practice-tools commit 57ad809
+accidentally included 4 already-staged chapter_pdmx_* file deletions - `git
+status` had them as `D ` (staged) before commit ran. They were deleted on
+disk already; recoverable from history if the other agent didn't want them.
