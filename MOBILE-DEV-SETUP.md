@@ -66,7 +66,7 @@ Two kinds of items below:
 - `eas login` verified — `jovan_andrei`, owner of personal account and `jovanandreis-team`
 - Target hardware confirmed: real Galaxy S26 Ultra registered on the Samsung account (matches the emulator profile)
 
-## Overnight build results (2026-10-10)
+## Overnight build results (2026-10-10, ran ~02:30–04:10, ~1h40m)
 
 - **Personal Hub app built and verified**: `C:\Projects\mobile-apps`, package `com.jovan.personalhub`, Expo SDK 57 dev client. Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`.
 - **All 11 project modules working**, verified on the Galaxy_S26_Ultra_API36 emulator with screenshots in `.agent_tasks/hub-v1/scratch/shots/`; hub also verified on Pixel_8a_API35 and Pixel_3a_API34.

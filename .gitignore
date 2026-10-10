@@ -19,3 +19,4 @@
 .agent_tasks/*/scratch/
 __pycache__/
 .pytest_cache/
+/mobile-apps/

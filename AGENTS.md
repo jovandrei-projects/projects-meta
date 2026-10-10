@@ -42,6 +42,7 @@ and add a row to the index; that is the whole ritual.
 | `video-tools` | Sorts recordings in `C:\Users\andry\Videos\history` into `_has_content`/`_blank_candidates` and generates whisper `.srt` sidecars. Media stays in `Videos`. | `analyze-blank-videos.bat` (copy also in `Videos`) |
 | `senior-safety-mx` | Evidence-backed catalog of emergency/fall-detection devices & services that work in Mexico (for an elder alone overnight). `devices.json` -> `index.html`. | `python generate_report.py`, `python app.py` |
 | `money-plan` | Rebuilds the user's 2024 conscious-spending-plan Excel from Monarch CSV exports; debt-paydown + budget targets. **Fully private financial data** - `data/` never leaves the machine, no serving. | `python analyze.py` (`--check` for sanity) |
+| `mobile-apps` | "Personal Hub" Expo/React Native app - one card per project (WebView dashboards + native screens) plus `pc-bridge/lan-bridge.py`, the token-auth proxy that lets the phone reach loopback services over LAN. | `npx expo start`, `python pc-bridge/lan-bridge.py` |
 
 Three of these hold data that must not leave the machine: `wifi-network-monitor`
 (device inventory, MACs, router responses), `chrome-bookmarks` (the bookmark
@@ -66,9 +67,13 @@ Whichever you use, use it deliberately:
 - PowerShell: `&&` does not chain commands - use `;`.
 - Git Bash: chains with `&&`, but **mangles arguments that look like Unix
   paths**. `tasklist /FI "IMAGENAME eq chrome.exe"` fails there because `/FI`
-  is rewritten to `C:/Program Files/Git/FI`. Prefix with `MSYS_NO_PATHCONV=1`,
-  or run such commands from PowerShell, or invoke them from Python with a
-  `subprocess` argument list, which bypasses the shell entirely.
+  is rewritten to `C:/Program Files/Git/FI`. Same with `start /b <cmd>`: `/b`
+  becomes `B:/`, so `cmd /c start B:/` pops a *modal* "The system cannot find
+  the drive specified" dialog that wedges the shell until someone clicks OK -
+  this produced mystery popups on 2026-10-09. Prefix with
+  `MSYS_NO_PATHCONV=1`, or run such commands from PowerShell, or invoke them
+  from Python with a `subprocess` argument list, which bypasses the shell
+  entirely.
 - Git Bash also does not know `/tmp` when the program is *Windows* Python.
   `python -c "open('/tmp/x','w')"` raises `FileNotFoundError`. Use
   `%LOCALAPPDATA%\Temp` or the project's own `data/`.
@@ -118,6 +123,8 @@ Local servers, so a new one does not collide:
 | 8790 | `video-tools` dashboard |
 | 8795 | `senior-safety-mx` device catalog |
 | 8800 | `money-plan` CSP dashboard |
+| 8762 | `mobile-apps` lan-bridge meta (health + file routes) |
+| 8763-8772 | `mobile-apps` lan-bridge per-service proxies (wifi 8763, hub 8764, disk 8766, thermal 8767, video 8768, money 8771, vocal 8772) |
 
 Pick the next free port in the 87xx range for anything new and add it here.
 
